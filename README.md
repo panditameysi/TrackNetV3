@@ -1,6 +1,10 @@
 ### Step 1: Set Up Python Conda Environment
 
-### Step 2: Download Testing Data from Google Drive for Testing or Original Raw Data Zip from S3
+### Step 2: Prepare and Download Testing Data from Google Drive for Testing or Original Raw Data Zip from S3
+
+Preapare Zip File of Raw Data Folders : video and csv
+
+After Unzipping file.zip we will get video and csv folders
 
 Run the following command to download the sample data file:
 
