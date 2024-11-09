@@ -44,7 +44,7 @@ if not os.path.exists(save_dir):
 model = get_model(model_name, num_frame, input_type)
 model = torch.nn.DataParallel(model).cuda()
 
-model_state_dict = {"module." + k: v for k, v in checkpoint['state_dict'].items()}
+model_state_dict = {"module." + k: v for k, v in checkpoint['model_state_dict'].items()}
 
 model.load_state_dict(model_state_dict)
 model.eval()

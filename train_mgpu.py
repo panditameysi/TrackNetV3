@@ -72,7 +72,7 @@ if __name__ == '__main__':
     model_summary(model, model_name)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-    model_state_dict = {"module." + k: v for k, v in checkpoint['state_dict'].items()}
+    model_state_dict = {"module." + k: v for k, v in checkpoint['model_state_dict'].items()}
 
     if not resume_training:
         loss_list = []
