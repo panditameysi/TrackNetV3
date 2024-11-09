@@ -67,18 +67,20 @@ if __name__ == '__main__':
 
     # create model
     model = get_model(model_name, num_frame, input_type)
-    model = torch.nn.DataParallel(model)
-    model = model.cuda()
+    model = torch.nn.DataParallel(model).cuda()
 
     model_summary(model, model_name)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
+    model_state_dict = {"module." + k: v for k, v in checkpoint['state_dict'].items()}
+
     if not resume_training:
         loss_list = []
         test_acc_dict = {'TP':[], 'TN': [], 'FP1': [], 'FP2': [], 'FN': [], 'accuracy': [], 'precision': [], 'recall': []}
         start_epoch = 0
         max_test_acc = 0.
     else:
-        model.load_state_dict(checkpoint['model_state_dict'])
+        model.load_state_dict(model_state_dict)
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         loss_list = checkpoint['loss_list']
         test_acc_dict = checkpoint['test_acc']
