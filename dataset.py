@@ -49,7 +49,9 @@ class Badminton_Dataset(Dataset):
 
     def _get_rally_dirs(self):
         match_dirs = list_dirs(os.path.join(self.root_dir, self.split))
-        match_dirs = sorted(match_dirs, key=lambda s: int(s.split('match')[-1]))
+        # match_dirs = sorted(match_dirs, key=lambda s: int(s.split('match')[-1]))
+        # match_dirs = sorted(match_dirs, key=lambda s: int(s.split('_')[1]))
+        match_dirs = sorted(match_dirs, key=lambda s: int(s.split('/')[-1].split('_')[1]))
         rally_dirs = []
         for match_dir in match_dirs:
             rally_dir = list_dirs(os.path.join(match_dir, 'frame'))
@@ -70,11 +72,13 @@ class Badminton_Dataset(Dataset):
             
             match_dir, rally_id = parse.parse('{}/frame/{}', rally_dir)
             
-            csv_file = os.path.join(match_dir, 'csv', f'{rally_id}_ball.csv')
+            # csv_file = os.path.join(match_dir, 'csv', f'{rally_id}_ball.csv')
+            csv_file = os.path.join(match_dir, 'csv', f'{rally_id}.csv')
             try:
                 label_df = pd.read_csv(csv_file, encoding='utf8').sort_values(by='Frame').fillna(0)
             except:
-                print(f'Label file {rally_id}_ball.csv not found.')
+                # print(f'Label file {rally_id}_ball.csv not found.')
+                print(f'Label file {rally_id}.csv not found.')
                 continue
             
             frame_file = np.array([os.path.join(rally_dir, f'{f_id}.png') for f_id in label_df['Frame']])
@@ -107,7 +111,8 @@ class Badminton_Dataset(Dataset):
         visibility = np.array([], dtype=np.float32).reshape(0, self.num_frame)
         
         match_dir, rally_id = parse.parse('{}/frame/{}', frame_dir)
-        csv_file = f'{match_dir}/csv/{rally_id}_ball.csv'
+        # csv_file = f'{match_dir}/csv/{rally_id}_ball.csv'
+        csv_file = f'{match_dir}/csv/{rally_id}.csv'
         label_df = pd.read_csv(csv_file, encoding='utf8').sort_values(by='Frame')
         frame_file = np.array([f'{frame_dir}/{f_id}.png' for f_id in label_df['Frame']])
         x, y, vis = np.array(label_df['X']), np.array(label_df['Y']), np.array(label_df['Visibility'])
